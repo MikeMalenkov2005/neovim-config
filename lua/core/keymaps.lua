@@ -12,13 +12,30 @@ vim.opt.cursorline = true
 vim.opt.autoread = true
 
 -- use spaces for tabs --
+
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.shiftround = true
 vim.opt.expandtab = true
 
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "java,gradle,groovy",
+  callback = function ()
+    vim.opt_local.tabstop = 4
+    vim.opt_local.shiftwidth = 4
+  end
+})
+
+-- remaps --
+
 vim.keymap.set('n', '<leader>h', ':nohlsearch<CR>')
 vim.keymap.set('n', '<C-s>', ':w<CR>')
+
+local builtin = require("telescope.builtin")
+vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
+vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
+vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 
 -- uuid generator --
 
@@ -46,9 +63,11 @@ vim.keymap.set('n', '<leader>idb', function ()
     ', 0x' .. s:sub(35, 36) .. ' }<ESC>'
 end, { expr = true })
 
--- file formats --
+-- 80 column line --
 
 vim.cmd('set cc=80')
+
+-- file formats --
 
 vim.cmd('au BufNewFile,BufRead *.h set ft=c')
 vim.cmd('au BufNewFile,BufRead *.S set ft=gas')

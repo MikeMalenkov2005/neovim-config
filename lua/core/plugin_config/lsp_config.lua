@@ -8,7 +8,7 @@ require("mason").setup({
     }
 })
 require("mason-lspconfig").setup({
-  ensure_installed = { "lua_ls", "clangd", "quick_lint_js" }
+  ensure_installed = { "lua_ls", "clangd", "quick_lint_js", "jdtls" }
 })
 
 local on_attach = function(_, _)
@@ -16,7 +16,7 @@ local on_attach = function(_, _)
   vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, {})
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {})
   vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, {})
-  vim.keymap.set('n', 'gr', require("telescope.builtin").lsp_references, {})
+  vim.keymap.set('n', 'gr', vim.lsp.buf.references, {})
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, {})
 end
 
@@ -45,6 +45,8 @@ lspconfig.quick_lint_js.setup {
 
 vim.api.nvim_create_autocmd('LspAttach', { callback = on_attach })
 
+vim.diagnostic.config({ virtual_text = true, update_in_insert = true })
+
 vim.lsp.enable('lua_ls')
 vim.lsp.enable('clangd')
-
+vim.lsp.enable('jdtls')
